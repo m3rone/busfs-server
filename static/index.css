@@ -1,0 +1,22 @@
+.busfsh2 {
+    text-align: center;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid black ;
+    box-sizing: border-box;
+    width:350px;
+    margin: auto;
+}
+
+.inputs > * {
+    margin-bottom: 5%;
+}
+
+.inputs > input {
+    margin-top: 5%;
+}

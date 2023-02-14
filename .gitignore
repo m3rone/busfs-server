@@ -1,0 +1,5 @@
+venv/
+tmp/
+data/
+file.log
+__pycache__/
