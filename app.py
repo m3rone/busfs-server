@@ -2,7 +2,8 @@ from flask import Flask, render_template, jsonify, request, abort
 from flask_basicauth import BasicAuth
 import json
 import os
-import stringutils as stru
+import stringutils as sutil
+import datautils as dutil
 from datetime import date
 
 ##############################
@@ -19,16 +20,16 @@ app = Flask(__name__)
 app.config['BASIC_AUTH_USERNAME'] = USERNAME
 app.config['BASIC_AUTH_PASSWORD'] = PASSWORD
 app.config['BASIC_AUTH_FORCE'] = True
-
 basic_auth = BasicAuth(app)
 datapath = 'data'
 
 if not os.path.exists(datapath):
     os.makedirs(datapath)
-    
+
 @app.route("/")
 def index():
-    return render_template("index.html")
+    fileNamesList, descriptionList, uploadDateList = dutil.loadData()
+    return render_template("index.html", fileNamesList=fileNamesList, descriptionList=descriptionList, uploadDateList=uploadDateList)
 
 @app.route("/upload-file", methods=['POST'])
 def upload():
@@ -47,7 +48,7 @@ def upload():
         filenamewoex, ext = os.path.splitext(filenamewex)
         
     desc = json.loads(desc)['desc']
-    randstr = stru.randomFour()
+    randstr = sutil.randomFour()
     dirname = filenamewoex + "-" + randstr
     os.makedirs(f"{datapath}/{dirname}")
     file.save(f'{datapath}/{dirname}/{filenamewex}')
@@ -57,9 +58,10 @@ def upload():
         "file_name": filenamewex,
         "date_uploaded": todayformat,
         "description": desc,
+        "uuid": randstr,
     }
     with open(f'{datapath}/{dirname}/data.json', 'w') as f:
         json.dump(jsontowrite, f)
-    return "OK"
+    return("200", 200)
 
 app.run(debug=True, host= HOST, port=PORT)

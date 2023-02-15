@@ -23,5 +23,6 @@ function uploadFile(){
         contentType: false,
         processData: false,
     });
-   // location.reload()
+//     setTimeout()
+//    location.reload()
 }

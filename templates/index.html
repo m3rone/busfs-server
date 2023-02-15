@@ -16,5 +16,23 @@
             <textarea id="descriptionbox" cols="30" rows="2" placeholder="Description"></textarea>
             <button type="submit" onclick="uploadFile()">Upload file</button>
         </div>
+        <div class="filetable">
+            <table>
+                <tr>
+                    <td class="column">File Name</td>
+                    <td class="column">Description</td>
+                    <td class="column">Upload Date</td>
+                    <!-- <td class="column">Actions</td> -->
+                </tr>
+                {% for i in range(fileNamesList|length) %}
+                    <tr>
+                        <td class="column">{{ fileNamesList[i] }}</td>
+                        <td class="column">{{ descriptionList[i] }}</td>
+                        <td class="column">{{ uploadDateList[i] }}</td>
+                        <!-- <td class="column"><button>Download</button><button>DELETE</button></td> -->
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </body>
 </html>

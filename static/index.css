@@ -11,12 +11,30 @@
     box-sizing: border-box;
     width:350px;
     margin: auto;
+    margin-bottom: 100px;
 }
 
 .inputs > * {
-    margin-bottom: 5%;
+    margin-bottom: 20px;
 }
 
 .inputs > input {
     margin-top: 5%;
 }
+
+.filetable {
+    margin-top: 100px; /* Change this value to adjust the distance */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid black;
+    box-sizing: border-box;
+    width: 550px;
+    margin: auto;
+}
+
+.column {
+    border: 1px solid black ;
+    width: 10000px;
+}
+
