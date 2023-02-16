@@ -35,9 +35,11 @@ From Github
 4. Run `python3 -m venv venv`
 5. Run `source venv/bin/activate`
 6. Run `python3 -m pip install -r requirements.txt`
+7. Run `python3 app.py` to start the app.
    
 From script
 1. Run `curl https://codeberg.org/m3r/busfs-server/raw/branch/master/install.sh | sh` (works with `apt`, `dnf`, `pacman`, and `brew`)
+2. Run `python3 app.py` to start the app.
 
 Using Docker
 1. (soon)
