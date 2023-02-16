@@ -23,6 +23,4 @@ function uploadFile(){
         contentType: false,
         processData: false,
     });
-//     setTimeout()
-//    location.reload()
 }
