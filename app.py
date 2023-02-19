@@ -5,7 +5,6 @@ import os
 import stringutils as sutil
 import datautils as dutil
 from datetime import date
-import glob
 from shutil import rmtree
 
 ##############################
@@ -33,36 +32,28 @@ def index():
     fileNamesList, descriptionList, uploadDateList, uuidList = dutil.loadData()
     return render_template("index.html", fileNamesList=fileNamesList, descriptionList=descriptionList, uploadDateList=uploadDateList, uuidList=uuidList)
     
-@app.route("/upload-file", methods=['POST'])
+@app.post("/upload-file")
 def upload():
-    #filename = ""
-    file = request.files['file']
+
+    file = request.files['userfile']
     if file == None:
         return("400", 400)
     
-    desc = request.form.get('data')
-    if desc == None:
-        return ("400", 400)
+    desc = request.form['userdescription']
     
-    filenamewex = file.filename
-    if filenamewex is not None: # second None check just to escape my pyright error
-        global filenamewoex
-        filenamewoex, ext = os.path.splitext(filenamewex)
-        
-    desc = json.loads(desc)['desc']
     randstr = sutil.randomFour()
-    dirname = filenamewoex + "-" + randstr
-    os.makedirs(f"{datapath}/{dirname}")
-    file.save(f'{datapath}/{dirname}/{filenamewex}')
+
+    os.makedirs(f"{datapath}/{randstr}")
+    file.save(f'{datapath}/{randstr}/{file.filename}')
     today = date.today()
     todayformat = today.strftime("%d.%m.%Y")
     jsontowrite = {
-        "file_name": filenamewex,
+        "file_name": file.filename,
         "date_uploaded": todayformat,
         "description": desc,
         "uuid": randstr,
     }
-    with open(f'{datapath}/{dirname}/data.json', 'w') as f:
+    with open(f'{datapath}/{randstr}/data.json', 'w') as f:
         json.dump(jsontowrite, f)
     
     return redirect("/")
