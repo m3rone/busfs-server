@@ -12,7 +12,7 @@
         <div class="inputs">
             <form action="/upload-file" method="post" enctype="multipart/form-data">
             <input name="userfile" type="file" id="uploadfile" required >
-            <textarea name="userdescription" id="descriptionbox" cols="30" rows="2" placeholder="Description"></textarea>
+            <textarea name="userdescription" id="descriptionbox" cols="30" rows="3" placeholder="Description"></textarea>
             <button type="submit">Upload file</button>
         </div>
         </form>
@@ -27,9 +27,9 @@
                 {% for i in range(fileNamesList|length) %}
                 <tr>
                     <td class="column">{{ fileNamesList[i] }}</td>
-                    <td class="column"><form action="{{ url_for('update', uuid=uuidList[i]) }}" method="post"><textarea name="inlinedesc" id="" cols="20" rows="3">{{ descriptionList[i] }}</textarea><button type="submit">Update</button></form></td>
+                    <td class="column"><form action="{{ url_for('update', uuid=uuidList[i]) }}" method="post"><textarea name="inlinedesc" id="" cols="20" rows="4">{{ descriptionList[i] }}</textarea><button type="submit">Update</button></form></td>
                     <td class="column">{{ uploadDateList[i] }}</td>
-                    <td class="column"><button><a href="{{ url_for('download', uuid=uuidList[i]) }}">Download</a></button><button><a href="{{ url_for('delete', uuid=uuidList[i]) }}">DELETE</a></button></td>
+                    <td class="column"><div class="buttons"><button><a href="{{ url_for('download', uuid=uuidList[i]) }}">Download</a></button><button style="background-color: red;"><a href="{{ url_for('delete', uuid=uuidList[i]) }}">DELETE</a></button></td></div>
                 </tr>
                 {% endfor %}
             </table>
