@@ -1,7 +1,6 @@
 import os
 import json
 
-
 def loadData():
     fileNamesList = []
     descriptionList = []
@@ -13,7 +12,7 @@ def loadData():
             with open(os.path.join('data', i, 'data.json'), 'r') as f:
                 infojson = json.load(f)
             fileNamesList.append(infojson['file_name'])
-            descriptionList.append(infojson['description'])                
+            descriptionList.append(infojson['description'])
             uploadDateList.append(infojson['date_uploaded'])
             uuidList.append(infojson['uuid'])
 
@@ -26,7 +25,7 @@ def getDir(uuid):
             infojson = json.load(f)
         if uuid == infojson['uuid']:
             thedir = os.path.join('data', uuid)
-    return(thedir)          
+    return(thedir)
 
 def updateDesc(uuid, text):
     if os.path.isdir("data/" + uuid):
@@ -36,7 +35,7 @@ def updateDesc(uuid, text):
             infojson['description'] = text
             with open(f'data/{uuid}/data.json', 'w') as f:
                 json.dump(infojson, f)
-                
+
 def getFile(uuid):
     filename = ""
     if os.path.isdir("data/" + uuid):
@@ -44,4 +43,4 @@ def getFile(uuid):
             infojson = json.load(f)
         if uuid == infojson['uuid']:
             filename = infojson['file_name']
-    return(filename)       
+    return(filename)

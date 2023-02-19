@@ -31,16 +31,16 @@ if not os.path.exists(datapath):
 def index():
     fileNamesList, descriptionList, uploadDateList, uuidList = dutil.loadData()
     return render_template("index.html", fileNamesList=fileNamesList, descriptionList=descriptionList, uploadDateList=uploadDateList, uuidList=uuidList)
-    
+
 @app.post("/upload-file")
 def upload():
 
     file = request.files['userfile']
     if file == None:
         return("400", 400)
-    
+
     desc = request.form['userdescription']
-    
+
     randstr = sutil.randomFour()
 
     while os.path.isdir(randstr):
@@ -58,7 +58,7 @@ def upload():
     }
     with open(f'{datapath}/{randstr}/data.json', 'w') as f:
         json.dump(jsontowrite, f)
-    
+
     return redirect("/")
 
 @app.route('/download/<uuid>')
