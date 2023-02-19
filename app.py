@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, abort, send_file, redirect, url_for
+from flask import Flask, render_template, request, abort, send_file, redirect, send_from_directory, url_for
 from flask_basicauth import BasicAuth
 import json
 import os
@@ -60,7 +60,7 @@ def upload():
 
 @app.route('/download/<uuid>')
 def download(uuid):
-    return("INCOMPLETE")
+    return send_from_directory(f"data/{uuid}", dutil.getFile(uuid), as_attachment=True)
 
 @app.route("/delete/<uuid>")
 def delete(uuid):

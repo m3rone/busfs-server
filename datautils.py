@@ -36,3 +36,12 @@ def updateDesc(uuid, text):
             infojson['description'] = text
             with open(f'data/{uuid}/data.json', 'w') as f:
                 json.dump(infojson, f)
+                
+def getFile(uuid):
+    filename = ""
+    if os.path.isdir("data/" + uuid):
+        with open(os.path.join('data', uuid, 'data.json'), 'r') as f:
+            infojson = json.load(f)
+        if uuid == infojson['uuid']:
+            filename = infojson['file_name']
+    return(filename)       
