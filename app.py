@@ -43,6 +43,9 @@ def upload():
     
     randstr = sutil.randomFour()
 
+    while os.path.isdir(randstr):
+        randstr = sutil.randomFour()
+
     os.makedirs(f"{datapath}/{randstr}")
     file.save(f'{datapath}/{randstr}/{file.filename}')
     today = date.today()
