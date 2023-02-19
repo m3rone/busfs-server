@@ -67,4 +67,10 @@ def delete(uuid):
     rmtree(dutil.getDir(uuid))
     return redirect("/")
 
+@app.post('/update-description/<uuid>')
+def update(uuid):
+    desc = request.form['inlinedesc']
+    dutil.updateDesc(uuid, desc)
+    return redirect("/")
+
 app.run(debug=True, host= HOST, port=PORT)
