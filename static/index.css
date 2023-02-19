@@ -42,6 +42,12 @@ a {
     color: black;
 }
 
+.descbox {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
 .buttons {
     display: flex;
     justify-content: space-between;

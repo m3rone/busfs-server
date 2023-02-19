@@ -1,13 +1,13 @@
 # busfs-server
 
-Basically Useless Simple File Storage is a very minimalist server side code with a web ui that lets you upload files, view uploaded files, and (will let you) download and delete those files. It is protected by basic HTTP authentication with an easy to set config. It is written in Python using Flask.
+Basically Useless Simple File Storage is a very minimalist server side code with a web ui that lets you upload files, view uploaded files, and lets you download and delete those files. It is protected by basic HTTP authentication with an easy to set config. It is written in Python using Flask.
 
-***Warning: Do not use this app for daily usage yet. It is not completed and missing core features, but I hope soon it will be production ready.*** If you do decide to install, be sure to keep it inaccessible from outside of your local network
+***Warning:*** This app currently does not have a secure way to open to WAN as it does not have a WSGI server configuration yet. Use this only in your local network for the time being.
 
 ### Features
-- Collision protection: busfs appends a 10 character string to the end of your file to avoid collisions if the files have same names. Additionally, it just checks whether the uuid exists and just changes it.
+- Collision protection: busfs appends a 10 character string to the end of your file to avoid collisions if the files have same names. Additionally, it just checks whether the uuid exists and assigns a new one.
 
-- Descriptions: You can add a description to the file you are uploading for more information.
+- Descriptions: You can add and update descriptions of the files that you are uploading for more information.
 
 - Security: busfs forces basic HTTP authentication for the entire app. Soon, there will be token based authentication and maybe even multi user support for shared and private directories later on.
 
@@ -20,7 +20,7 @@ Basically Useless Simple File Storage is a very minimalist server side code with
 
 - It supports only one user account. 
 
-- UX kinda sucks right now. You have to manually reload the page to see newly added files and **you can not download the files**
+- UI could be better. I am working on it.
 
 ---
 ### Installation
@@ -49,9 +49,9 @@ Using an executable
 - [ ] Manage configuration through a config.ini file
 - [ ] Provide docker images
 - [ ] Provide executables with PyInstaller
-- [ ] Add file downloads
+- [x] Add file downloads
 - [x] Add file deletion
-- [ ] Fix button spacing/Improve UX within the webapp
+- [x] Fix button spacing/Improve UX within the webapp
 - [ ] Create clients 
 - [x] Switch to 10 digit UUID's instead of 4
 - [ ] Switch to Flask-Security
