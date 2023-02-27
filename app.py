@@ -34,10 +34,10 @@ if CHKFORUPDATES == "yes":
     response = requests.get(f'https://codeberg.org/api/v1/repos/m3r/busfs-server/releases')
     release = response.json()
     if response.status_code == 200:
-        if release['tag_name'] != VERSION:
+        if len(release) > 0 and str(release[0]['tag_name']) != VERSION:
             print(f'Your version is {VERSION}, and the latest version is {release["tag_name"]}.')
         else:
-            print('You are running the latest version of this app')
+            print(f'You are running the latest version of this app')
     else:
         print(f'Something went wrong while checking for updates. Response code is {response.status_code}. Your version is {VERSION} and the upstream is {release["tag_name"]}')
 
