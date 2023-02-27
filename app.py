@@ -35,11 +35,11 @@ if CHKFORUPDATES == "yes":
     release = response.json()
     if response.status_code == 200:
         if len(release) > 0 and str(release[0]['tag_name']) != VERSION:
-            print(f'Your version is {VERSION}, and the latest version is {release["tag_name"]}.')
+            print(f'Your version is {VERSION}, and the latest version is {str(release[0]["tag_name"])}.')
         else:
             print(f'You are running the latest version of this app')
     else:
-        print(f'Something went wrong while checking for updates. Response code is {response.status_code}. Your version is {VERSION} and the upstream is {release["tag_name"]}')
+        print(f'Something went wrong while checking for updates. Response code is {int(response.status_code)}. Your version is {VERSION} and the upstream is {str(release[0]["tag_name"])}')
 
 app = Flask(__name__)
 
