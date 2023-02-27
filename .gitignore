@@ -3,3 +3,9 @@ tmp/
 data/
 file.log
 __pycache__/
+checklist.txt
+config.ini
+build/
+dist/
+*.spec
+build.sh

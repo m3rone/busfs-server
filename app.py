@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, abort, send_file, redirect, send_from_directory, url_for
+from flask import Flask, render_template, request, redirect, send_from_directory
+import requests
 from flask_basicauth import BasicAuth
 import json
 import os
@@ -22,14 +23,23 @@ if not os.path.isfile("config.ini"):
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
 
-##############################
-#           CONFIG           # !!!!!!! PLEASE CHANGE YOUR DEFAULT USERNAME AND PASSWORD !!!!!!!
-USERNAME = "admin"           # The username you wish to use. Please put it in quotation marks
-PASSWORD = "admin"           # The password you wish to use. Please put it in quotation marks as well
-HOST = "0.0.0.0"             # Put in the IP address that you wish to listen from. This one also goes in quotation marks
-PORT = 6798                  # Put in the port number that you wish to listen from. This one does not go in quotation marks.
-#LOG_LEVEL = ""              #
-##############################
+config.read('config.ini')
+USERNAME = str(config.get('settings', 'username'))
+PASSWORD = str(config.get('settings', 'password'))
+HOST = str(config.get('settings', 'host'))
+PORT = int(config.get('settings', 'port'))
+CHKFORUPDATES = str(config.get('settings', 'check-for-updates'))
+
+if CHKFORUPDATES == "yes":
+    response = requests.get(f'https://codeberg.org/api/v1/repos/m3r/busfs-server/releases')
+    release = response.json()
+    if response.status_code == 200:
+        if release['tag_name'] != VERSION:
+            print(f'Your version is {VERSION}, and the latest version is {release["tag_name"]}.')
+        else:
+            print('You are running the latest version of this app')
+    else:
+        print(f'Something went wrong while checking for updates. Response code is {response.status_code}. Your version is {VERSION} and the upstream is {release["tag_name"]}')
 
 app = Flask(__name__)
 
@@ -56,10 +66,10 @@ def upload():
 
     desc = request.form['userdescription']
 
-    randstr = sutil.randomFour()
+    randstr = sutil.randomTen()
 
     while os.path.isdir(randstr):
-        randstr = sutil.randomFour()
+        randstr = sutil.randomTen()
 
     os.makedirs(f"{datapath}/{randstr}")
     file.save(f'{datapath}/{randstr}/{file.filename}')
