@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ "$EUID" -eq 0 ]
   then echo "Please do not run this script as root."
   exit
@@ -15,25 +17,41 @@ elif command -v pacman >/dev/null 2>&1; then
   PKG_MANAGER="pacman"
 elif command -v brew >/dev/null 2>&1; then
   PKG_MANAGER="brew"
+elif command -v zypper >/dev/null 2>&1; then
+  PKG_MANAGER="zypper"
+elif command -v apk >/dev/null 2>&1; then
+  PKG_MANAGER="apk"
 else
   echo "Error: No supported package manager found."
   exit 1
 fi
 
-if [ "$PKG_MANAGER" = "pacman" ]; then
-  sudo pacman -Sy python git || exit
-else
-  sudo $PKG_MANAGER install python3 git -y || exit
-fi
+case $PKG_MANAGER in
+  "apt-get")
+    sudo $PKG_MANAGER install python3 git -y
+    ;;
+  "dnf"|"yum"|"zypper")
+    sudo $PKG_MANAGER install python3 git -y
+    ;;
+  "pacman")
+    sudo pacman -Sy python git
+    ;;
+  "brew")
+    brew install python git
+    ;;
+  "apk")
+    sudo apk add python3 git
+    ;;
+esac
 
-git clone https://codeberg.org/m3r/busfs-server.git || exit
+git clone https://codeberg.org/m3r/busfs-server.git
 
-cd busfs-server || exit
+cd busfs-server
 
-python3 -m venv venv || exit
+python3 -m venv venv
 
-source venv/bin/activate || exit
+source venv/bin/activate
 
-python3 -m pip install -r requirements.txt || exit
+python3 -m pip install -r requirements.txt
 
 echo "Setup complete!"

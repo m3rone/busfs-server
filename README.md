@@ -4,6 +4,8 @@ Basically Useless Simple File Storage is a very minimalist server side code with
 
 ***Warning:*** This app currently does not have a secure way to open to WAN as it does not have a WSGI server configuration yet. Use this only in your local network for the time being.
 
+For more documentation, please visit the wiki.
+
 ### Features
 - Collision protection: busfs appends a 10 character string to the end of your file to avoid collisions if the files have same names. Additionally, it just checks whether the uuid exists and assigns a new one.
 
@@ -24,7 +26,7 @@ Basically Useless Simple File Storage is a very minimalist server side code with
 
 ---
 ### Installation
-After you install, the username and password will be `admin`. You may change it if you wish in the `app.py` file. Additionally, it will run on `0.0.0.0:6798`. That also can be changed in the `app.py` file.
+After you install, the username and password will be generated randomly and you can find and edit them and host and port settings in the config.ini file.
 
 From Codeberg
 1. Install `git`, and `python3`.
@@ -36,7 +38,7 @@ From Codeberg
 7. Run `python3 app.py` to start the app.
    
 From script
-1. Run `curl https://codeberg.org/m3r/busfs-server/raw/branch/master/install.sh | sh` (works with `apt`, `dnf`, `pacman`, and `brew`)
+1. Run `curl https://codeberg.org/m3r/busfs-server/raw/branch/master/install.sh | sh` (works with `apt`, `dnf`, `zypper`, `pacman`, `brew`, `apk`, and `yum`)
 2. Run `python3 app.py` to start the app.
 
 Using Docker
@@ -46,7 +48,7 @@ Using an executable
 1. (soon)
 
 ### TODO / Roadmap
-- [ ] Manage configuration through a config.ini file
+- [x] Manage configuration through a config.ini file
 - [ ] Provide docker images
 - [ ] Provide executables with PyInstaller
 - [x] Add file downloads
@@ -55,7 +57,7 @@ Using an executable
 - [ ] Create clients 
 - [x] Switch to 10 digit UUID's instead of 4
 - [ ] Switch to Flask-Security
-- [ ] Add versions and releases to the app
+- [x] Add versions and releases to the app
 
 
 ### "Maybe" features
