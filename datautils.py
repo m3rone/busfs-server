@@ -11,10 +11,10 @@ def loadData():
         if os.path.isdir("data/" + i):
             with open(os.path.join('data', i, 'data.json'), 'r') as f:
                 infojson = json.load(f)
-            fileNamesList.append(infojson['file_name'])
-            descriptionList.append(infojson['description'])
-            uploadDateList.append(infojson['date_uploaded'])
-            uuidList.append(infojson['uuid'])
+            fileNamesList.insert(0, infojson['file_name'])
+            descriptionList.insert(0, infojson['description'])
+            uploadDateList.insert(0, infojson['date_uploaded'])
+            uuidList.insert(0, infojson['uuid'])
 
     return fileNamesList, descriptionList, uploadDateList, uuidList
 
