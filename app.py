@@ -6,6 +6,21 @@ import stringutils as sutil
 import datautils as dutil
 from datetime import date
 from shutil import rmtree
+import configparser
+
+VERSION = "v0.01.0beta"
+
+config = configparser.ConfigParser()
+if not os.path.isfile("config.ini"):
+    config['settings'] = {
+    'USERNAME': sutil.randomTen(),
+    'PASSWORD': sutil.randomTen(),
+    'HOST': '0.0.0.0',
+    'PORT': '6798',
+    'CHECK-FOR-UPDATES' : "yes" if input("Do you want to check for updates automatically? y/N ") in ["y", "Y", "yes"] else "no"
+    }
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
 
 ##############################
 #           CONFIG           # !!!!!!! PLEASE CHANGE YOUR DEFAULT USERNAME AND PASSWORD !!!!!!!
