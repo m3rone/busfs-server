@@ -22,6 +22,10 @@
     margin-top: 5%;
 }
 
+.versionmessage {
+    text-align: center;
+}
+
 .filetable {
     margin-top: 100px;
     display: flex;
