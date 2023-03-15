@@ -13,7 +13,6 @@ pipeline:
     when:
       tag: v*
     commands:
-        - ls
-        - pwd
+        - apt install curl
         - curl -fsSL https://get.docker.com/ | sh
         - docker build -t codeberg.org/m3r/busfs-server:latest . && docker login codeberg.org -u m3r -p $DOCKER_PASSWORD && docker push codeberg.org/m3r/busfs-server:latest
