@@ -4,8 +4,10 @@ Basically Useless Simple File Storage is a very minimalist server side code with
 
 For more documentation, please visit the wiki.
 
+It still is in beta so the format and everything may change in updates without warning (though release notes will say it). Use it at your own risk
+
 ### Features
-- Collision protection: BUSFS appends a 10 random character string to the end of your file to avoid collisions if the files have same names. Additionally, it just checks whether the uuid exists and assigns a new one.
+- Collision protection: BUSFS uses a random 10 character string to identify and operate on your files to avoid collisions if the files have same names. Additionally, it just checks whether the uuid exists and assigns a new one if it does.
 
 - Descriptions: You can add and update descriptions of the files that you are uploading for more information.
 
@@ -28,41 +30,45 @@ On your first run, the username and password will be generated randomly and you 
 
 From Codeberg
 1. Install `git`, and `python3`.
-2. Run `git clone https://codeberg.org/m3r/BUSFS-server.git` in your terminal to clone the repo
-3. Run `cd BUSFS-server`
+2. Run `git clone https://codeberg.org/m3r/busfs-server.git` in your terminal to clone the repo
+3. Run `cd busfs-server`
 4. Run `python3 -m venv venv` to create the virtual environment
 5. Run `source venv/bin/activate` to activate the virtual environment (`deactivate` to deactivate it)
 6. Run `python3 -m pip install -r requirements.txt` to install the dependencies
    
 From script
-1. Run `curl https://codeberg.org/m3r/BUSFS-server/raw/branch/master/install.sh | sh` (works with `apt`, `dnf`, `zypper`, `pacman`, `brew`, `apk`, and `yum`)
+1. Run `curl https://codeberg.org/m3r/busfs-server/raw/branch/master/install.sh | sh` (works with `apt`, `dnf`, `zypper`, `pacman`, `brew`, `apk`, and `yum`)
 
 Using Docker
-1. (soon)
+1. Run `docker pull codeberg.org/m3r/busfs-server:latest` to pull the image 
 
 Using an executable
 1. (soon)
 
 ### Starting BUSFS
 
-If you've installed from Codeberg or the script, run `uwsgi --http-socket 0.0.0.0:5000 --wsgi-file start.py` (always be in the virtual environment when running. The script puts you in one).
+If you've installed from Codeberg or the script, run `uwsgi --http-socket 127.0.0.1:6798 --wsgi-file start.py` (always be in the virtual environment when running. The script puts you in one).
 
-You can adjust the host and port by modifying the command above
+If you are using docker, run `docker run -d -p 127.0.0.1:6798:6798 -v busfs-data:/app busfs-server:latest` to run the image. You can change the host and port by editing the `127.0.0.1:6798` part.
+
+You can adjust the host and port by modifying the commands above
 
 ### Updating BUSFS
 
 soon:tm:
 
 #### To consider
-It should be noted that if you put BUSFS behind a reverse proxy, do not forget to increase the maximum body size (guides for [nginx](https://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size), [apache](https://ubiq.co/tech-blog/increase-file-upload-size-apache), [caddy](https://caddyserver.com/docs/modules/http.handlers.request_body), [lighttpd](https://redmine.lighttpd.net/projects/lighttpd/wiki/Server_max-request-sizeDetails)) otherwise you will get a 413 error.
+- It should be noted that if you put BUSFS behind a reverse proxy, do not forget to increase the maximum body size (guides for [nginx](https://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size), [apache](https://ubiq.co/tech-blog/increase-file-upload-size-apache), [caddy](https://caddyserver.com/docs/modules/http.handlers.request_body), [lighttpd](https://redmine.lighttpd.net/projects/lighttpd/wiki/Server_max-request-sizeDetails)) otherwise you will get a 413 error.
 
-By default, update checking is disabled. You can enable it by typing `yes` instead of `no` in config.ini file.
+- By default, update checking is disabled. You can enable it by typing `yes` instead of `no` in config.ini file.
 
-You may want to use [`screen`](https://wiki.archlinux.org/title/GNU_Screen) or daemonize uwsgi by adding `--daemonize logfile.log` to the start command to keep uwsgi running in the background.
+- You may want to use [`screen`](https://wiki.archlinux.org/title/GNU_Screen) or daemonize uWSGI by adding `--daemonize logfile.log` to the start command to keep uWSGI running in the background **if** you have installed it via Codeberg or script. With docker, `-d` flag takes care of that.
+- To change the password when running with docker, first run `docker ps` to get the CONTAINER ID and then do `docker exec -it CONTAINER-ID nano app/config.ini`
 
+- If you have set a limit on how big your /tmp can get, that will limit you to the maximum size you can upload.
 ### TODO / Roadmap
 - [x] Manage configuration through a config.ini file
-- [ ] Provide docker images
+- [x] Provide docker images
 - [ ] Provide executables with PyInstaller
 - [x] Add file downloads
 - [x] Add file deletion

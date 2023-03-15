@@ -2,11 +2,6 @@
 
 set -e
 
-if [ "$EUID" -eq 0 ]
-  then echo "Please do not run this script as root."
-  exit
-fi
-
 if command -v apt-get >/dev/null 2>&1; then
   PKG_MANAGER="apt-get"
 elif command -v dnf >/dev/null 2>&1; then
@@ -48,10 +43,6 @@ git clone https://codeberg.org/m3r/busfs-server.git
 
 cd busfs-server
 
-python3 -m venv venv
-
-source venv/bin/activate
-
-python3 -m pip install -r requirements.txt
+python3 -m venv venv && source venv/bin/activate && python3 -m pip install -r requirements.txt
 
 echo "Setup complete!"

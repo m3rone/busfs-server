@@ -9,22 +9,26 @@ from datetime import date
 from shutil import rmtree
 import configparser
 
-VERSION = "v0.02.0beta"
+VERSION = "v0.02.1beta"
+datapath = dutil.datapath
 
 def create_app():
+    if not os.path.exists(datapath):
+        os.makedirs(datapath)
+        
     config = configparser.ConfigParser()
-    if not os.path.isfile("config.ini"):
+    if not os.path.isfile("app/config.ini"):
         config['settings'] = {
         'USERNAME': sutil.randomTen(),
         'PASSWORD': sutil.randomTen(),
-        #'HOST': '0.0.0.0', Enable for debugging purposes for when using the built in flask server
+        #'HOST': '0.0.0.0', # Enable for debugging purposes for when using the built in flask server
         #'PORT': '6798',
         'CHECK-FOR-UPDATES' : "no"
         }
-        with open('config.ini', 'w') as configfile:
+        with open('app/config.ini', 'w') as configfile:
             config.write(configfile)
 
-    config.read('config.ini')
+    config.read('app/config.ini')
     USERNAME = str(config.get('settings', 'username'))
     PASSWORD = str(config.get('settings', 'password'))
     #HOST = str(config.get('settings', 'host'))
@@ -43,8 +47,6 @@ def create_app():
             versionmessage = f'Something went wrong while checking for updates. Response code is {int(response.status_code)}. Your version is "{VERSION}" and the upstream is "{str(release[0]["tag_name"])}"' #print(f'Something went wrong while checking for updates. Response code is {int(response.status_code)}. Your version is {VERSION} and the upstream is {str(release[0]["tag_name"])}')
     else:
         versionmessage = ""
-
-    datapath = 'data'
     
     app = Flask(__name__)
 
@@ -75,7 +77,7 @@ def create_app():
         while os.path.isdir(randstr):
             randstr = sutil.randomTen()
 
-        os.makedirs(f"{datapath}/{randstr}")
+        os.makedirs(os.path.join(datapath, randstr))
         file.save(f'{datapath}/{randstr}/{file.filename}')
         today = date.today()
         todayformat = today.strftime("%d.%m.%Y")
@@ -92,7 +94,7 @@ def create_app():
 
     @app.route('/download/<uuid>')
     def download(uuid):
-        return send_from_directory(f"data/{uuid}", dutil.getFile(uuid), as_attachment=True)
+        return send_from_directory(f"{datapath}/{uuid}", dutil.getFile(uuid), as_attachment=True)
 
     @app.route("/delete/<uuid>")
     def delete(uuid):

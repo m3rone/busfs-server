@@ -8,4 +8,8 @@ build/
 dist/
 *.spec
 build.sh
+.gitignore
+install.sh
+LICENCE
+README.md
 app/
