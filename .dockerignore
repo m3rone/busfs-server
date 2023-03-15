@@ -13,3 +13,4 @@ install.sh
 LICENCE
 README.md
 app/
+.vscode/

@@ -9,3 +9,4 @@ dist/
 *.spec
 build.sh
 app/
+.vscode/
