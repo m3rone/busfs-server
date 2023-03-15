@@ -26,7 +26,7 @@ It still is in beta so the format and everything may change in updates without w
 
 ---
 ### Installing BUSFS
-On your first run, the username and password will be generated randomly and you can find and edit them in the config.ini file.
+On your first run, the username and password will be generated randomly and you can find and edit them in the app/config.ini file.
 
 From Codeberg
 1. Install `git`, and `python3`.
