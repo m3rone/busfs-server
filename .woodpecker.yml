@@ -15,7 +15,5 @@ pipeline:
     commands:
         - ls
         - pwd
-        - apt update && apt install -y git python3
         - curl -fsSL https://get.docker.com/ | sh
-        - cd busfs-server
         - docker build -t codeberg.org/m3r/busfs-server:latest . && docker login codeberg.org -u m3r -p $DOCKER_PASSWORD && docker push codeberg.org/m3r/busfs-server:latest
