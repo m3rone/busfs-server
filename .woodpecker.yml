@@ -9,7 +9,7 @@ pipeline:
   #     - python3 -m pip install virtualenv
 
   build:
-    image: ubuntu-latest
+    image: ubuntu:latest
     when:
       tag: v*
     commands:
