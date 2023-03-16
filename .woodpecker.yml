@@ -9,10 +9,8 @@ pipeline:
   #     - python3 -m pip install virtualenv
 
   build:
-    image: ubuntu:latest
+    image: docker
     when:
       tag: v*
     commands:
-        - apt update && apt install -y curl
-        - curl -fsSL https://get.docker.com/ | sh
         - docker build -t codeberg.org/m3r/busfs-server:latest . && docker login codeberg.org -u m3r -p $DOCKER_PASSWORD && docker push codeberg.org/m3r/busfs-server:latest
