@@ -1,18 +1,18 @@
-pipeline:
-  # lint:
-  #   image: ubuntu-latest
-  #   when:
-  #     event: [push, tag, deployment]
-  #   commands:
-  #     - apt update && apt install git python3
-  #     - python3 -m ensurepip
-  #     - python3 -m pip install virtualenv
+# pipeline:
+#   # lint:
+#   #   image: ubuntu-latest
+#   #   when:
+#   #     event: [push, tag, deployment]
+#   #   commands:
+#   #     - apt update && apt install git python3
+#   #     - python3 -m ensurepip
+#   #     - python3 -m pip install virtualenv
 
-  build:
-    image: ubuntu:latest
-    when:
-      tag: v*
-    commands:
-        - apt install curl
-        - curl -fsSL https://get.docker.com/ | sh
-        - docker build -t codeberg.org/m3r/busfs-server:latest . && docker login codeberg.org -u m3r -p $DOCKER_PASSWORD && docker push codeberg.org/m3r/busfs-server:latest
+#   build:
+#     image: ubuntu:latest
+#     when:
+#       tag: v*
+#     commands:
+#         - apt update && apt install -y curl
+#         - curl -fsSL https://get.docker.com/ | sh
+#         - docker build -t codeberg.org/m3r/busfs-server:latest . && docker login codeberg.org -u m3r -p $DOCKER_PASSWORD && docker push codeberg.org/m3r/busfs-server:latest
