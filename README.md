@@ -71,7 +71,7 @@ soon:tm:
 - [ ] Provide executables with PyInstaller
 - [x] Add file downloads
 - [x] Add file deletion
-- [x] Fix button spacing/Improve UX within the webapp
+- [ ] Fix button spacing/Improve UX within the webapp
 - [ ] Create clients 
 - [x] Switch to 10 digit UUID's instead of 4
 - [ ] Switch to Flask-Security
