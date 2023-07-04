@@ -16,14 +16,12 @@ passchangemsg = ""
 def create_app():
     if not os.path.exists(datapath):
         os.makedirs(datapath)
-        
+
     config = configparser.ConfigParser()
     if not os.path.isfile("app/config.ini"):
         config['settings'] = {
         'USERNAME': "admin",
         'PASSWORD': "admin",
-        # 'HOST': '0.0.0.0', # Enable for debugging purposes for when using the built in flask server
-        # 'PORT': '6798',
         'CHECK-FOR-UPDATES' : "no"
         }
         with open('app/config.ini', 'w') as configfile:
@@ -32,8 +30,8 @@ def create_app():
     config.read('app/config.ini')
     USERNAME = str(config.get('settings', 'username'))
     PASSWORD = str(config.get('settings', 'password'))
-    HOST = str(config.get('settings', 'host'))
-    PORT = int(config.get('settings', 'port'))
+    HOST = '0.0.0.0'
+    PORT = 6798
     CHKFORUPDATES = str(config.get('settings', 'check-for-updates'))
 
     if CHKFORUPDATES == "yes":
@@ -41,14 +39,14 @@ def create_app():
         release = response.json()
         if response.status_code == 200:
             if len(release) > 0 and str(release[0]['tag_name']) != VERSION:
-                versionmessage = f'Your version is "{VERSION}", and the latest version is "{str(release[0]["tag_name"])}".' #print(f'Your version is {VERSION}, and the latest version is {str(release[0]["tag_name"])}.')
+                versionmessage = f'Your version is "{VERSION}", and the latest version is "{str(release[0]["tag_name"])}".'
             else:
-                versionmessage = "You are running the latest version of this app" #print(f'You are running the latest version of this app')
+                versionmessage = "You are running the latest version of this app"
         else:
-            versionmessage = f'Something went wrong while checking for updates. Response code is {int(response.status_code)}. Your version is "{VERSION}" and the upstream is "{str(release[0]["tag_name"])}"' #print(f'Something went wrong while checking for updates. Response code is {int(response.status_code)}. Your version is {VERSION} and the upstream is {str(release[0]["tag_name"])}')
+            versionmessage = f'Something went wrong while checking for updates. Response code is {int(response.status_code)}. Your version is "{VERSION}" and the upstream is "{str(release[0]["tag_name"])}"'
     else:
         versionmessage = ""
-    
+
     app = Flask(__name__)
 
     app.config['BASIC_AUTH_USERNAME'] = USERNAME
@@ -108,7 +106,7 @@ def create_app():
         desc = request.form['inlinedesc']
         dutil.updateDesc(uuid, desc)
         return redirect("/")
-    
+
     @app.post('/update-creds')
     def changecreds():
         global passchangemsg
@@ -126,8 +124,8 @@ def create_app():
             passchangemsg = "Your credentials have been changed. Please restart the server."
         return redirect("/")
 
-    app.run(debug=True, host= HOST, port=PORT)
+    #app.run(debug=True, host= HOST, port=PORT)
 
     return app
 
-create_app()
+#create_app()
