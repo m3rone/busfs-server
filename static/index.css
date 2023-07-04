@@ -57,3 +57,7 @@ a {
     justify-content: space-between;
     gap: 1cm;
 }
+
+.credchange {
+    text-align: center;
+}

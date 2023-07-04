@@ -36,5 +36,12 @@
                 {% endfor %}
             </table>
         </div>
+        <br>
+        <form class="credchange" action="/update-creds" method="post">
+            <input type="text" name="newuser" placeholder="New Username">
+            <input type="text" name="newpass" placeholder="New Password">
+            <button type="submit">Change Credentials</button>
+        </form>
+        <p class="credchange">{{passchangemsg}}</p>
     </body>
 </html>

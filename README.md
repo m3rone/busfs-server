@@ -15,10 +15,10 @@ It still is in beta so the format and everything may change in updates without w
 
 - Clients: After BUSFS is in working order, clients for different platforms (Linux, Windows, maybe even Android) will be developed with both CLI and GUI alternatives. It is also very easy to integrate your own apps as all the API's are easily accessible.
 
-- Simple with no maintenance: To run, you only have to install the dependencies and run a single file.
+- Simple with no maintenance: To run, you only have to install the dependencies and run a single command.
 
 ### Limitations
-- Currently, BUSFS stores the user password in plaintext in the app.py file. Which means your username and password will reset if you just copy and paste the new version of this app in place of the old one. Regarding plaintext, it should not be an issue as someone who gets access to your server already has access to your files. Please encrypt your files if this is a concern.
+- Currently, BUSFS stores the user password in plaintext in the config.ini file. However, it should not be an issue as someone who gets access to your server already has access to your files. Please encrypt your files if this is a concern.
 
 - It supports only one user account. 
 
@@ -26,7 +26,7 @@ It still is in beta so the format and everything may change in updates without w
 
 ---
 ### Installing BUSFS
-On your first run, the username and password will be generated randomly and you can find and edit them in the app/config.ini file.
+The default username and password is `admin` and can be changed through the web interface or by modifying the `app/config.ini` file.
 
 From Codeberg
 1. Install `git`, and `python3`.
@@ -63,7 +63,6 @@ soon:tm:
 - By default, update checking is disabled. You can enable it by typing `yes` instead of `no` in config.ini file.
 
 - You may want to use [`screen`](https://wiki.archlinux.org/title/GNU_Screen) or daemonize uWSGI by adding `--daemonize logfile.log` to the start command to keep uWSGI running in the background **if** you have installed it via Codeberg or script. With docker, `-d` flag takes care of that.
-- To change the password when running with docker, first run `docker ps` to get the CONTAINER ID and then do `docker exec -it CONTAINER-ID nano app/config.ini`
 
 - If you have set a limit on how big your /tmp can get, that will limit you to the maximum size you can upload.
 ### TODO / Roadmap

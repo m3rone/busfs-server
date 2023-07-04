@@ -11,6 +11,7 @@ import configparser
 
 VERSION = "v0.02.1beta"
 datapath = dutil.datapath
+passchangemsg = ""
 
 def create_app():
     if not os.path.exists(datapath):
@@ -19,10 +20,10 @@ def create_app():
     config = configparser.ConfigParser()
     if not os.path.isfile("app/config.ini"):
         config['settings'] = {
-        'USERNAME': sutil.randomTen(),
-        'PASSWORD': sutil.randomTen(),
-        #'HOST': '0.0.0.0', # Enable for debugging purposes for when using the built in flask server
-        #'PORT': '6798',
+        'USERNAME': "admin",
+        'PASSWORD': "admin",
+        # 'HOST': '0.0.0.0', # Enable for debugging purposes for when using the built in flask server
+        # 'PORT': '6798',
         'CHECK-FOR-UPDATES' : "no"
         }
         with open('app/config.ini', 'w') as configfile:
@@ -31,8 +32,8 @@ def create_app():
     config.read('app/config.ini')
     USERNAME = str(config.get('settings', 'username'))
     PASSWORD = str(config.get('settings', 'password'))
-    #HOST = str(config.get('settings', 'host'))
-    #PORT = int(config.get('settings', 'port'))
+    HOST = str(config.get('settings', 'host'))
+    PORT = int(config.get('settings', 'port'))
     CHKFORUPDATES = str(config.get('settings', 'check-for-updates'))
 
     if CHKFORUPDATES == "yes":
@@ -60,8 +61,9 @@ def create_app():
 
     @app.route("/")
     def index():
+        global passchangemsg
         fileNamesList, descriptionList, uploadDateList, uuidList = dutil.loadData()
-        return render_template("index.html", fileNamesList=fileNamesList, descriptionList=descriptionList, uploadDateList=uploadDateList, uuidList=uuidList, versionmessage=versionmessage)
+        return render_template("index.html", fileNamesList=fileNamesList, descriptionList=descriptionList, uploadDateList=uploadDateList, uuidList=uuidList, versionmessage=versionmessage, passchangemsg = passchangemsg)
 
     @app.post("/upload-file")
     def upload():
@@ -106,9 +108,26 @@ def create_app():
         desc = request.form['inlinedesc']
         dutil.updateDesc(uuid, desc)
         return redirect("/")
+    
+    @app.post('/update-creds')
+    def changecreds():
+        global passchangemsg
+        newuser = request.form['newuser']
+        if newuser:
+            config.set('settings', 'username', str(newuser))
+            with open('app/config.ini', 'w') as configfile:
+                config.write(configfile)
+        newpass = request.form['newpass']
+        if newpass:
+            config.set('settings', 'password', str(newpass))
+            with open('app/config.ini', 'w') as configfile:
+                config.write(configfile)
+        if newpass or newuser:
+            passchangemsg = "Your credentials have been changed. Please restart the server."
+        return redirect("/")
 
-    #app.run(debug=True, host= HOST, port=PORT)
+    app.run(debug=True, host= HOST, port=PORT)
 
     return app
 
-#create_app()
+create_app()
