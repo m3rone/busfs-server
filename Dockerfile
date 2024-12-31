@@ -1,15 +1,18 @@
-FROM python:3.10.9
+FROM alpine:latest
 
-COPY . .
-
-RUN python -m venv venv \
-    && . venv/bin/activate \
-    && pip install --no-cache-dir -r requirements.txt
-
-RUN apt update && apt install nano
+RUN apk update
+RUN apk add python3
+ENV VENV_PATH=/root
+RUN python3 -m venv ${VENV_PATH}
+ENV PATH="$VENV_PATH/bin:$PATH"
+RUN python3 -m ensurepip
+COPY requirements.txt .
+RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 6798
 
-CMD ["venv/bin/uwsgi", "--http-socket", "0.0.0.0:6798", "--wsgi-file", "start.py"]
+COPY . . 
 
-# docker run -d -p 6798:6798 -v busfs-data:/app busfs-server:latest
+CMD ["gunicorn", "--bind", "0.0.0.0:6798", "--workers", "3", "start:application"]
+
+# docker run -d -p 6798:6798 -v busfs-data:/app ghcr.io/m3rone/busfs-server:latest

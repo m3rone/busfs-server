@@ -1,17 +1,30 @@
-from flask import Flask, render_template, request, redirect, send_from_directory
+from flask import Flask, abort, render_template, request, redirect, send_from_directory
 import requests
 from flask_basicauth import BasicAuth
 import json
 import os
-import stringutils as sutil
-import datautils as dutil
+import modules.stringutils as sutil
+import modules.datautils as dutil
 from datetime import date
-from shutil import rmtree
 import configparser
+import sqlite3
 
 VERSION = "v0.02.1beta"
+INTERNALVERSION = 21
 datapath = dutil.datapath
 passchangemsg = ""
+
+conn = sqlite3.connect("app/files.db")
+cursor = conn.cursor()
+
+cursor.execute("""CREATE TABLE IF NOT EXISTS files (
+                id integer primary key,
+                filename text not null,
+                description text,
+                upload_date text not null,
+                uuid integer unique not null
+                );
+               """)
 
 def create_app():
     if not os.path.exists(datapath):
@@ -60,45 +73,39 @@ def create_app():
     @app.route("/")
     def index():
         global passchangemsg
-        fileNamesList, descriptionList, uploadDateList, uuidList = dutil.loadData()
-        return render_template("index.html", fileNamesList=fileNamesList, descriptionList=descriptionList, uploadDateList=uploadDateList, uuidList=uuidList, versionmessage=versionmessage, passchangemsg = passchangemsg)
+        filelists = dutil.loadData()
+        return render_template("index.html", filelists = filelists, versionmessage=versionmessage, passchangemsg = passchangemsg)
 
     @app.post("/upload-file")
     def upload():
 
         file = request.files['userfile']
         if file == None:
-            return("400", 400)
+            abort(400)
 
         desc = request.form['userdescription']
 
         randstr = sutil.randomTen()
 
-        while os.path.isdir(randstr):
+        while os.path.isdir(os.path.join(datapath, randstr)):
             randstr = sutil.randomTen()
 
         os.makedirs(os.path.join(datapath, randstr))
         file.save(f'{datapath}/{randstr}/{file.filename}')
         today = date.today()
         todayformat = today.strftime("%d.%m.%Y")
-        jsontowrite = {
-            "file_name": file.filename,
-            "date_uploaded": todayformat,
-            "description": desc,
-            "uuid": randstr,
-        }
-        with open(f'{datapath}/{randstr}/data.json', 'w') as f:
-            json.dump(jsontowrite, f)
+
+        dutil.addFileToDB(file, desc, todayformat, randstr)
 
         return redirect("/")
 
     @app.route('/download/<uuid>')
     def download(uuid):
-        return send_from_directory(f"{datapath}/{uuid}", dutil.getFile(uuid), as_attachment=True)
+        return send_from_directory(f"{datapath}/{uuid}", dutil.getFile(uuid, ), as_attachment=True)
 
     @app.route("/delete/<uuid>")
     def delete(uuid):
-        rmtree(dutil.getDir(uuid))
+        dutil.delDir(uuid, )
         return redirect("/")
 
     @app.post('/update-description/<uuid>')
@@ -124,8 +131,16 @@ def create_app():
             passchangemsg = "Your credentials have been changed. Please restart the server."
         return redirect("/")
 
-    #app.run(debug=True, host= HOST, port=PORT)
+
+    ### API
+
+    # @app.get("/v1/uploaded")
+    # def apihome():
+    #     return dutil.jsonLoad()
+    
+
+    #app.run(debug=True, host= HOST, port=PORT) # UNCOMMENT FOR DEVEL
 
     return app
 
-#create_app()
+#create_app() # UNCOMMENT FOR DEVEL

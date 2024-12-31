@@ -1,14 +1,11 @@
-# DO NOT USE YET IDK WHY IT DOES NOT WORK
-
-version: '3.9'
-
 services:
-  app:
-    image: busfs-server:latest
+  busfs:
+    container_name: busfs
+    image: ghcr.io/m3rone/busfs-server:latest
     ports:
       - "6798:6798"
     volumes:
-      - busfs-data:/app/data
+      - busfs-data:/app/
 
 volumes:
   busfs-data:

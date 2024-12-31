@@ -11,31 +11,36 @@
     <body>
         <h2 class="busfsh2">Basically Useless Simple File Storage</h2>
         <div class="inputs">
-            <form action="/upload-file" method="post" enctype="multipart/form-data">
-            <input name="userfile" type="file" id="uploadfile" required >
-            <textarea name="userdescription" id="descriptionbox" cols="30" rows="3" placeholder="Description"></textarea>
-            <button type="submit">Upload file</button>
+            <form class="forminputs" action="/upload-file" method="post" enctype="multipart/form-data">
+                <input name="userfile" type="file" id="uploadfile" required >
+                <textarea name="userdescription" id="descriptionbox" cols="30" rows="3" placeholder="Description"></textarea>
+                <button type="submit">Upload file</button>
+            </form>
         </div>
-        </form>
         <p class="versionmessage">{{versionmessage}}</p>
+        {% if filelists %}
         <div class="filetable">
             <table>
                 <tr>
-                    <td class="column">File Name</td>
-                    <td class="column">Description</td>
-                    <td class="column">Upload Date</td>
-                    <td class="column">Actions</td>
+                    <th class="column">File Name</th>
+                    <th class="column">Description</th>
+                    <th class="column">Upload Date</th>
+                    <th class="column">Actions</th>
                 </tr>
-                {% for i in range(fileNamesList|length) %}
-                <tr>
-                    <td class="column">{{ fileNamesList[i] }}</td>
-                    <td class="column"><form action="{{ url_for('update', uuid=uuidList[i]) }}" method="post"><div class="descbox"><textarea name="inlinedesc" id="" cols="20" rows="4">{{ descriptionList[i] }}</textarea><button type="submit">Update</button></form></div></td>
-                    <td class="column">{{ uploadDateList[i] }}</td>
-                    <td class="column"><div class="buttons"><button><a href="{{ url_for('download', uuid=uuidList[i]) }}">Download</a></button><button style="background-color: hsla(0, 100%, 50%, 0.568);"><a href="{{ url_for('delete', uuid=uuidList[i]) }}">DELETE</a></button></div></td>
-                </tr>
+                {% for filelist in filelists %}
+                    <tr>
+                            <td class="column breakable">{{ filelist[1] }}</td>
+                            <td class="column"><form action="/update-description/{{filelist[4]}}" method="post"><div class="descbox"><textarea name="inlinedesc" id="" cols="20" rows="4">{{ filelist[2] }}</textarea><button type="submit">Update</button></form></div></td>
+                            <td class="column">{{ filelist[3] }}</td>
+                            <td class="column"><div class="buttons"><button><a href="/download/{{filelist[4]}}">Download</a></button><button style="background-color: hsla(0, 100%, 50%, 0.568);">
+                                <a href="/delete/{{filelist[4]}}">DELETE</a></button></div></td>
+                    </tr>
                 {% endfor %}
             </table>
         </div>
+        {% elif not filelist %}
+        <p class="filetable">No files uploaded</p>
+        {% endif %}
         <br>
         <form class="credchange" action="/update-creds" method="post">
             <input type="text" name="newuser" placeholder="New Username">
